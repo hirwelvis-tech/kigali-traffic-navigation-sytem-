@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Kigali Traffic System</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo-title">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/traffic-jam.png" alt="Logo" class="admin-logo">
+                    <h1>Admin Dashboard</h1>
+                </div>
+                <div class="admin-info">
+                    <span id="admin-name">👤 Admin</span>
+                    <button id="back-home-btn" onclick="goToHome()">🏠 Back to Home</button>
+                    <button id="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </header>
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon stat-total">📋</div>
+                <div class="stat-number" id="total-issues">0</div>
+                <div class="stat-label">Total Issues</div>
+            </div>
+            <div class="stat-card pending">
+                <div class="stat-icon stat-pending">⏳</div>
+                <div class="stat-number" id="pending-issues">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-card solved">
+                <div class="stat-icon stat-solved">✅</div>
+                <div class="stat-number" id="solved-issues">0</div>
+                <div class="stat-label">Solved</div>
+            </div>
+        </div>
+        <div class="filters-section">
+            <div class="filter-group">
+                <label for="status-filter">Filter by Status:</label>
+                <select id="status-filter" onchange="filterIssues()">
+                    <option value="all">All Issues</option>
+                    <option value="pending">Pending</option>
+                    <option value="solved">Solved</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="type-filter">Filter by Type:</label>
+                <select id="type-filter" onchange="filterIssues()">
+                    <option value="all">All Types</option>
+                    <option value="traffic-jam">Traffic Jam</option>
+                    <option value="accident">Accident</option>
+                    <option value="road-closure">Road Closure</option>
+                    <option value="construction">Construction</option>
+                    <option value="pothole">Pothole</option>
+                    <option value="flooding">Flooding</option>
+                    <option value="broken-traffic-light">Broken Traffic Light</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <input type="text" id="search-input" placeholder="Search issues..." onkeyup="filterIssues()">
+            </div>
+        </div>
+        <div class="issues-container">
+            <div class="issues-header">
+                <h2>Reported Issues</h2>
+                <div class="refresh-btn" onclick="loadIssues()">
+                    <span>🔄</span> Refresh
+                </div>
+            </div>
+            <div id="issues-list" class="issues-list">
+                <!-- Issues will be loaded here -->
+            </div>
+        </div>
+    </div>
+    <!-- Custom Popup Overlay -->
+    <div id="popup-overlay" class="popup-overlay">
+        <div class="popup">
+            <div id="popup-icon" class="popup-icon"></div>
+            <div id="popup-title" class="popup-title"></div>
+            <div id="popup-message" class="popup-message"></div>
+            <button id="popup-button" class="popup-button">OK</button>
+        </div>
+    </div>
+    <script src="admin.js"></script>
+</body>
+</html> 
