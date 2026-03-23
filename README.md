@@ -97,7 +97,7 @@ Kigali_Traffic_App/
 - **Add Issue Types:** Update the `<select>` in `issue-report.html` and related logic in JS files.
 
 ## Credits
-- Developed by David Birenzi
+- Developed Hirwa Elvis 
 - Powered by [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/overview)
 
 
