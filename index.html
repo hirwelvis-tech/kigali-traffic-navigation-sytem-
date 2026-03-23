@@ -266,6 +266,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            margin:10px;
         }
         .loading {
             position: absolute;
@@ -403,10 +404,11 @@
             top: 90px;
             left: 0;
             right: 0;
-            bottom: 120px;
+            bottom: var(--nav-footer-height, 100px);
             z-index: 1000;
             border-radius: 0 !important;
-            height: 18 !important;
+            /* Let top/bottom define the height (prevents blank space) */
+            height: auto !important;
             box-shadow: none !important;
         }
         .nav-header-bar {
@@ -499,6 +501,7 @@
             border-top: 3px solid var(--accent);
             z-index: 1001;
             padding: 0;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
             box-shadow: 0 -4px 24px rgba(0,184,169,0.13);
             color: white;
             font-family: 'Inter', Arial, sans-serif;
@@ -597,6 +600,14 @@
                 <p>Find the best route with real-time traffic updates</p>
             </div>
             <nav style="display: flex; gap: 15px; align-items: center;">
+                <a id="login-link" href="auth.html" style="display: none;">
+                    <span style="font-size: 1.2em;">🔐</span>
+                    Login
+                </a>
+                <a id="logout-btn" href="#" style="display: none; background: linear-gradient(90deg, var(--danger) 60%, #ffb199 100%); border: 1.5px solid rgba(255,255,255,0.18);">
+                    <span style="font-size: 1.2em;">🚪</span>
+                    Logout
+                </a>
                 <a href="issue-report.html">
                     <span style="font-size: 1.2em;">⚠️</span>
                     Report an Issue
@@ -658,23 +669,47 @@
         <p>© 2026 Hirwa Elvis | All rights reserved</p>
     </footer>
     <!-- Replace YOUR_API_KEY with your actual Google Maps API key -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3QYtOU1P5Dkf4nNFfREDfTB-z99XWijQ&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBblPMDpiRhMOB02aVVuW1XDshCzgeDK94&libraries=places&loading=async&callback=initMap" async defer></script>
     <!-- Include the JavaScript file we created earlier -->
     <script src="script.js"></script>
     <script>
-      // Hide admin button if not admin
-      document.addEventListener('DOMContentLoaded', function() {
-        const loggedInUser = sessionStorage.getItem('loggedInUser');
-        let isAdmin = false;
+      document.addEventListener('DOMContentLoaded', async function() {
+        const loginLink = document.getElementById('login-link');
+        const logoutBtn = document.getElementById('logout-btn');
+
         try {
-          if (loggedInUser) {
-            const user = JSON.parse(loggedInUser);
-            isAdmin = user && user.role === 'admin';
+          const meResponse = await fetch('/api/auth/me', { credentials: 'include' });
+          const meData = await meResponse.json().catch(() => ({}));
+
+          if (loginLink && logoutBtn) {
+            if (meResponse.ok && meData.authenticated) {
+              loginLink.style.display = 'none';
+              logoutBtn.style.display = 'flex';
+            } else {
+              logoutBtn.style.display = 'none';
+              loginLink.style.display = 'flex';
+            }
           }
-        } catch (e) {}
-        const adminBtn = document.getElementById('admin-btn');
-        if (adminBtn && !isAdmin) {
-          adminBtn.style.display = 'none';
+        } catch (error) {
+          if (loginLink && logoutBtn) {
+            logoutBtn.style.display = 'none';
+            loginLink.style.display = 'flex';
+          }
+        }
+
+        if (logoutBtn) {
+          logoutBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+              await fetch('/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({})
+              });
+            } catch (error) {}
+            window.location.href = 'auth.html';
+          });
         }
       });
     </script>

@@ -39,6 +39,33 @@ This is a static frontend app. You can open `index.html` directly in your browse
 #### Using VSCode Live Server Extension
 - Right-click `index.html` and select **Open with Live Server**.
 
+### 4. Deploy with GitHub Pages
+This app is deployed at **[https://hirwacedric123.github.io/traffic_system/](https://hirwacedric123.github.io/traffic_system/)**.
+
+To enable or update the deployment:
+1. Go to your repo **Settings** → **Pages**.
+2. Under **Build and deployment** → **Source**, choose **Deploy from a branch**.
+3. Select branch **main** and folder **/ (root)**, then **Save**.
+4. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials), add `https://hirwacedric123.github.io/*` to your API key’s **HTTP referrers** so the map works on the live site.
+
+### 5. Deploy with Netlify
+The project includes a `netlify.toml` config for [Netlify](https://www.netlify.com/).
+
+**Option A – Connect GitHub (recommended, auto-deploys on push):**
+1. Sign in at [app.netlify.com](https://app.netlify.com/) with GitHub.
+2. Click **Add new site** → **Import an existing project**.
+3. Choose **GitHub** and authorize Netlify, then select the **hirwacedric123/traffic_system** repo.
+4. Netlify will detect the config: **Build command** can stay empty, **Publish directory** is `.` (from `netlify.toml`).
+5. Click **Deploy site**. Your site will be at `https://<random-name>.netlify.app` (you can change it in **Site settings** → **Domain management**).
+6. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials), add `https://*.netlify.app/*` (or your exact site URL) to your Maps API key’s **HTTP referrers**.
+
+**Option B – Deploy from CLI:**
+```bash
+npm install -g netlify-cli
+netlify login
+netlify init   # link to a new or existing site
+netlify deploy --prod
+```
 
 ## Folder Structure
 ```
@@ -57,7 +84,7 @@ Kigali_Traffic_App/
 ```
 
 ## Usage
-- **Sign Up / Log In:** Access the app via `auth.html`. Users can sign up or log in. Admin uses `admin@kigali.com` / `admin123`.
+- **Sign Up / Log In:** Access the app via `auth.html`. Users can sign up or log in. Admin account is created with `flask --app backend.app create-admin` (configurable via `ADMIN_EMAIL` and `ADMIN_PASSWORD`).
 
 - **Get Directions:** Enter start and end locations, click **Get Directions**.
 - **Start Navigation:** You can start navigation on the chosen route **Start Navigation**.
@@ -70,7 +97,7 @@ Kigali_Traffic_App/
 - **Add Issue Types:** Update the `<select>` in `issue-report.html` and related logic in JS files.
 
 ## Credits
-- Developed by Hirwa Elvis 
+- Developed by David Birenzi
 - Powered by [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/overview)
 
 
